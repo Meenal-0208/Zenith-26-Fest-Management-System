@@ -1,0 +1,22 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# SQLite database (optional to exclude, but keeping local fest.db or tracking initial)
+*.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

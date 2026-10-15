@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenith '26 | Fest Admin Coordinator Dashboard</title>
+  <!-- Favicon using SVG data URI -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20%220%22%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+  
+  <!-- Tailwind CSS via Play CDN (classroom use) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(8px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Navbar -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl p-1.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20">📊</span>
+        <div>
+          <a href="/admin.html" class="text-lg sm:text-xl font-bold tracking-tight text-white hover:text-indigo-400 transition-colors">
+            Zenith <span class="text-indigo-400">'26</span> Admin
+          </a>
+          <span class="block sm:inline sm:ml-2 text-[11px] font-medium text-slate-400">Coordinator Dashboard</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Student Portal</span>
+        </a>
+        <button id="open-add-event-btn" class="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-sm shadow-indigo-600/30">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span class="hidden sm:inline">Add Event</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+    
+    <!-- Refresh Bar & Live Indicator -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-800/40 p-3 sm:px-4 rounded-xl border border-slate-800">
+      <div class="flex items-center space-x-2 text-xs text-slate-400">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Live Database Sync — Real-time Fest Analytics</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span id="last-updated-text" class="text-xs text-slate-400">Updated just now</span>
+        <button id="refresh-all-btn" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center space-x-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Error Container -->
+    <div id="stats-error" class="hidden p-4 rounded-xl bg-red-950/40 border border-red-800 text-red-300 text-sm"></div>
+
+    <!-- 4 Key Stat Cards (Step 8.1) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Total Events -->
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Events</span>
+          <span class="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 text-lg">📅</span>
+        </div>
+        <div id="stat-total-events" class="text-2xl sm:text-3xl font-black text-white">--</div>
+        <p class="text-xs text-slate-400 mt-1">Seeded competitions</p>
+      </div>
+
+      <!-- Total Registrations -->
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Registrations</span>
+          <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 text-lg">🎟️</span>
+        </div>
+        <div id="stat-total-registrations" class="text-2xl sm:text-3xl font-black text-white">--</div>
+        <p class="text-xs text-slate-400 mt-1">Confirmed student sign-ups</p>
+      </div>
+
+      <!-- Overall Utilization % -->
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Capacity Utilization</span>
+          <span class="p-2 rounded-xl bg-purple-500/10 text-purple-400 text-lg">📈</span>
+        </div>
+        <div id="stat-utilization-pct" class="text-2xl sm:text-3xl font-black text-white">--%</div>
+        <div class="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+          <div id="stat-utilization-bar" class="bg-purple-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Upcoming Events -->
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Events</span>
+          <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400 text-lg">⏳</span>
+        </div>
+        <div id="stat-upcoming-events" class="text-2xl sm:text-3xl font-black text-white">--</div>
+        <p class="text-xs text-slate-400 mt-1">Events today or later</p>
+      </div>
+    </div>
+
+    <!-- Category Breakdown (Step 8.2) -->
+    <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 sm:p-6 shadow-sm">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 mb-4 flex items-center space-x-2">
+        <span>Events Distribution by Category</span>
+      </h3>
+      <div id="category-breakdown-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <!-- Rendered dynamically -->
+        <div class="text-xs text-slate-400">Loading categories...</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs between Event Utilization Table and Raw Registrations List -->
+    <div class="border-b border-slate-800 flex space-x-6 text-sm font-semibold">
+      <button id="tab-events-btn" class="pb-3 border-b-2 border-indigo-500 text-white flex items-center space-x-2">
+        <span>🏆 Event Utilization Table</span>
+        <span id="events-table-count" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">0</span>
+      </button>
+      <button id="tab-registrations-btn" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition-colors">
+        <span>📋 Student Registration Roster</span>
+        <span id="registrations-table-count" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">0</span>
+      </button>
+    </div>
+
+    <!-- SECTION 1: Events Utilization Table (Step 8.3 & 8.4) -->
+    <section id="section-events-table" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h3 class="text-base font-bold text-white">Fest Events Overview</h3>
+          <p class="text-xs text-slate-400">Sorted by Capacity Utilization (Highest demand first). Events &gt;90% capacity flagged in warning amber.</p>
+        </div>
+        <div class="text-xs text-slate-400">
+          Showing <span id="event-row-count" class="font-bold text-slate-200">--</span> events
+        </div>
+      </div>
+
+      <!-- Events Table Container -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-800/40 shadow-sm">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="text-xs uppercase bg-slate-800/90 text-slate-400 border-b border-slate-700/80">
+            <tr>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Event</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Category</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Schedule</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Venue</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Reg / Capacity</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Utilization %</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody id="events-table-body" class="divide-y divide-slate-800">
+            <tr>
+              <td colspan="7" class="py-12 text-center text-slate-400">Loading events table...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Raw Registrations List (Step 8.5 & Stretch 2) -->
+    <section id="section-registrations-table" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/50 p-4 rounded-2xl border border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-white">Registered Students Roster</h3>
+          <p class="text-xs text-slate-400">Inspect raw student sign-ups. Filter by specific event or cancel registrations.</p>
+        </div>
+        <!-- Event Filter Dropdown -->
+        <div class="flex items-center space-x-2">
+          <label for="reg-event-filter" class="text-xs font-medium text-slate-400">Filter Event:</label>
+          <select id="reg-event-filter" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white outline-none focus:border-indigo-500">
+            <option value="">All Events</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Registrations Table -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-800/40 shadow-sm">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="text-xs uppercase bg-slate-800/90 text-slate-400 border-b border-slate-700/80">
+            <tr>
+              <th scope="col" class="py-3.5 px-4 font-semibold">#</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Student Name</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Roll No</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Email</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Event</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold">Registered At</th>
+              <th scope="col" class="py-3.5 px-4 font-semibold text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="registrations-table-body" class="divide-y divide-slate-800">
+            <tr>
+              <td colspan="7" class="py-12 text-center text-slate-400">Loading registrations...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: Add Event (Stretch Goal 1) -->
+  <div id="add-event-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/75 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center">
+    <div class="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden my-8 animate-fade-in">
+      <div class="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-800/40">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>✨</span> Create New Fest Event
+        </h3>
+        <button id="close-add-event-modal" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <form id="add-event-form" class="p-5 sm:p-6 space-y-4">
+        <div id="add-event-alert" class="hidden p-3 rounded-xl text-sm font-semibold"></div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Event Title <span class="text-red-400">*</span></label>
+          <input type="text" id="new-event-title" required placeholder="e.g. Hackathon 2026" class="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Category <span class="text-red-400">*</span></label>
+            <select id="new-event-category" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500">
+              <option value="Technical">Technical</option>
+              <option value="Cultural">Cultural</option>
+              <option value="Sports">Sports</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Workshop">Workshop</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Emoji Icon</label>
+            <input type="text" id="new-event-icon" value="⚡" maxlength="4" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500 text-center" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Date (YYYY-MM-DD) <span class="text-red-400">*</span></label>
+            <input type="date" id="new-event-date" value="2026-11-14" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Time <span class="text-red-400">*</span></label>
+            <input type="text" id="new-event-time" value="10:00 AM" placeholder="10:00 AM" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Venue <span class="text-red-400">*</span></label>
+          <input type="text" id="new-event-venue" required placeholder="Main Auditorium" class="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Capacity <span class="text-red-400">*</span></label>
+            <input type="number" id="new-event-capacity" min="1" value="50" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Fee (₹)</label>
+            <input type="number" id="new-event-fee" min="0" value="0" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Description</label>
+          <textarea id="new-event-description" rows="2" placeholder="Brief event description..." class="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-indigo-500"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" id="save-new-event-btn" class="w-full py-2.5 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">
+            Create Event
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500 bg-slate-900/60 mt-auto">
+    <p>© 2026 Zenith College Fest Management System • Coordinator Admin Console</p>
+  </footer>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
