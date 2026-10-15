@@ -1,0 +1,166 @@
+/* Halloween Spooky Animations & Theme */
+
+/* Floating animation for ghosts / pumpkins */
+@keyframes spookyFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+/* Flying bat animation across the screen */
+@keyframes batFly {
+  0% {
+    transform: translate(-100px, 40px) scale(0.7) rotate(15deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(50vw, -30px) scale(1) rotate(-10deg);
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(calc(100vw + 80px), 60px) scale(0.6) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+/* Spider swinging down */
+@keyframes spiderSwing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
+}
+
+/* Spooky neon orange & purple pulse for headings/cards */
+@keyframes spookyGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.6), 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.9), 0 0 35px rgba(236, 72, 153, 0.7);
+  }
+}
+
+@keyframes fogDrift {
+  0% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(10%);
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+
+/* Floating background particles */
+@keyframes floatParticle {
+  0% {
+    transform: translateY(100vh) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.spooky-float {
+  animation: spookyFloat 4s ease-in-out infinite;
+}
+
+.spooky-float-delayed {
+  animation: spookyFloat 5s ease-in-out 1.5s infinite;
+}
+
+.spooky-glow-text {
+  animation: spookyGlow 3s ease-in-out infinite;
+}
+
+.spider-web-corner {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+}
+
+.spider-web-corner:hover {
+  opacity: 0.75;
+}
+
+/* Background floating spooky emojis canvas container */
+#spooky-particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.spooky-particle {
+  position: absolute;
+  animation: floatParticle linear infinite;
+  user-select: none;
+}
+
+/* Halloween Mode Active Theme Overrides */
+body.halloween-mode {
+  background-color: #0b0712 !important; /* dark spooky eerie midnight */
+}
+
+body.halloween-mode .bg-slate-900 {
+  background-color: #0d0918 !important;
+}
+
+body.halloween-mode .bg-slate-800\/80,
+body.halloween-mode .bg-slate-800 {
+  background-color: #161026 !important;
+  border-color: #3b1d5c !important;
+}
+
+body.halloween-mode .group:hover {
+  box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.25), 0 8px 10px -6px rgba(168, 85, 247, 0.3) !important;
+  border-color: #f97316 !important;
+}
+
+body.halloween-mode button.bg-indigo-600 {
+  background-color: #ea580c !important; /* Spooky pumpkin orange */
+  box-shadow: 0 4px 14px 0 rgba(234, 88, 12, 0.4) !important;
+}
+body.halloween-mode button.bg-indigo-600:hover {
+  background-color: #c2410c !important;
+}
+
+body.halloween-mode .filter-btn.bg-indigo-600 {
+  background-color: #ea580c !important;
+  box-shadow: 0 4px 14px 0 rgba(234, 88, 12, 0.4) !important;
+}
