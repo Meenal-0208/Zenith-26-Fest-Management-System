@@ -25,14 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnText = document.getElementById("btn-text");
   const btnSpinner = document.getElementById("btn-spinner");
 
-  // Category badge colors
+  // Category badge colors (Spooky Halloween Palette)
   const categoryBadgeColors = {
-    Technical: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-    Cultural: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-    Sports: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-    Gaming: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-    Workshop: "bg-pink-500/20 text-pink-300 border-pink-500/30",
+    Technical: "bg-purple-950/80 text-purple-300 border-purple-700/60",
+    Cultural: "bg-orange-950/80 text-orange-300 border-orange-700/60",
+    Sports: "bg-emerald-950/80 text-emerald-300 border-emerald-700/60",
+    Gaming: "bg-red-950/80 text-red-300 border-red-700/60",
+    Workshop: "bg-amber-950/80 text-amber-300 border-amber-700/60",
   };
+
 
   /**
    * Fetches events from API with real query parameters
@@ -158,12 +159,13 @@ document.addEventListener("DOMContentLoaded", () => {
             data-event-id="${ev.id}"
             class="view-details-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-sm ${
               isFull
-                ? "bg-slate-700 hover:bg-slate-600 text-slate-300"
-                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30"
+                ? "bg-stone-800 hover:bg-stone-700 text-stone-400 border border-stone-700"
+                : "bg-orange-600 hover:bg-orange-500 text-white shadow-orange-600/40"
             }"
           >
             ${isFull ? "Details" : "Register"}
           </button>
+
         </div>
       `;
 
@@ -377,9 +379,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update button visual states
       categoryButtons.forEach((b) => {
-        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700";
+        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-black text-slate-300 hover:text-orange-300 hover:bg-[#150d24] border border-orange-950/80";
       });
-      btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-600/30";
+      btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-orange-600 text-white shadow-sm shadow-orange-600/40";
 
       fetchEvents();
     });
@@ -400,13 +402,14 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.value = "";
     categoryButtons.forEach((b) => {
       if (b.getAttribute("data-category") === "All") {
-        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-600/30";
+        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-orange-600 text-white shadow-sm shadow-orange-600/40";
       } else {
-        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700";
+        b.className = "filter-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-black text-slate-300 hover:text-orange-300 hover:bg-[#150d24] border border-orange-950/80";
       }
     });
     fetchEvents();
   };
+
 
   // State helpers
   function showLoading() {
