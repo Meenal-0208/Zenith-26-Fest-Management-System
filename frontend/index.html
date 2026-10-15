@@ -3,43 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zenith '26 | College Fest Management System</title>
+  <title>Zenith '26 | College Fest Management System (Halloween Edition)</title>
   <!-- Favicon using SVG data URI for instant crisp display without external assets -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20%220%22%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
-  <link rel="stylesheet" href="/halloween.css">
   
-  <!-- Note: Tailwind Play CDN is used here for local classroom development.
-       A production application would use a compiled stylesheet via Tailwind CLI or PostCSS. -->
+  <!-- Note: Tailwind Play CDN is used here for local classroom development. -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#fff7ed',
-              100: '#ffedd5',
-              500: '#f97316',
-              600: '#ea580c',
-              700: '#c2410c',
-              900: '#7c2d12'
-            }
-          },
-          animation: {
-            'fade-in': 'fadeIn 0.35s ease-out forwards',
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0', transform: 'translateY(12px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            }
-          }
-        }
+
+  <style>
+    /* Spooky Halloween Animations & Effects */
+    @keyframes spookyFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-12px) rotate(4deg); }
+      50% { transform: translateY(-22px) rotate(-4deg); }
+      75% { transform: translateY(-10px) rotate(2deg); }
+    }
+    @keyframes spookyPulse {
+      0%, 100% {
+        text-shadow: 0 0 10px #f97316, 0 0 20px #ea580c, 0 0 35px #9333ea;
+        color: #fed7aa;
+      }
+      50% {
+        text-shadow: 0 0 20px #fb923c, 0 0 35px #f97316, 0 0 50px #c026d3;
+        color: #ffffff;
       }
     }
-  </script>
+    @keyframes batFlyAcross {
+      0% {
+        transform: translate(-100px, 30px) scale(0.6) rotate(15deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.9; }
+      50% { transform: translate(50vw, -40px) scale(1.1) rotate(-10deg); }
+      90% { opacity: 0.9; }
+      100% {
+        transform: translate(calc(100vw + 100px), 50px) scale(0.6) rotate(15deg);
+        opacity: 0;
+      }
+    }
+    @keyframes particleUp {
+      0% { transform: translateY(105vh) rotate(0deg) scale(0.8); opacity: 0; }
+      10% { opacity: 0.7; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+    }
+    @keyframes spiderSwing {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(18deg); }
+      75% { transform: rotate(-18deg); }
+    }
+
+    .spooky-float { animation: spookyFloat 3.5s ease-in-out infinite; }
+    .spooky-float-2 { animation: spookyFloat 4.2s ease-in-out 1.2s infinite; }
+    .spooky-glow { animation: spookyPulse 2.5s ease-in-out infinite; }
+    
+    .flying-bat {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      font-size: 38px;
+      filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.8));
+      animation: batFlyAcross 8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    .spooky-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10;
+      animation: particleUp linear infinite;
+      user-select: none;
+    }
+
+    /* Halloween color themes */
+    body {
+      background-color: #0c0714 !important;
+      background-image: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.12) 0%, transparent 60%),
+                        radial-gradient(circle at 100% 50%, rgba(147, 51, 234, 0.1) 0%, transparent 50%) !important;
+    }
+    .halloween-card-glow:hover {
+      box-shadow: 0 0 25px rgba(249, 115, 22, 0.35) !important;
+      border-color: #f97316 !important;
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white halloween-mode">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
 
   <!-- Top Navbar -->
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-orange-900/40">

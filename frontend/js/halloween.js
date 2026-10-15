@@ -8,22 +8,20 @@
     container.id = 'spooky-particles-container';
     document.body.appendChild(container);
 
-    const particleCount = window.innerWidth < 768 ? 10 : 20;
+    const particleCount = window.innerWidth < 768 ? 16 : 28;
 
     for (let i = 0; i < particleCount; i++) {
       createSpookyParticle(container);
     }
 
-    // 2. Flying Bat occasional animation
-    setInterval(spawnFlyingBat, 9000);
-    setTimeout(spawnFlyingBat, 1500);
+    // 2. Flying Bat animation - spawn one immediately and then periodically
+    spawnFlyingBat();
+    setInterval(spawnFlyingBat, 6500);
 
     // 3. Hanging spider web in top corner
     addCornerWebs();
-
-    // 4. Default halloween mode on or add toggle
-    document.body.classList.add('halloween-mode');
   }
+
 
   function createSpookyParticle(container) {
     const el = document.createElement('div');

@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const feeDisplay = ev.fee === 0 ? "Free" : `₹${ev.fee}`;
 
       const card = document.createElement("div");
-      card.className = "group relative bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-indigo-500/50 rounded-2xl p-5 sm:p-6 transition-all duration-200 shadow-md hover:shadow-indigo-500/10 hover:-translate-y-1 flex flex-col justify-between animate-fade-in";
+      card.className = "group relative bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-orange-500/80 rounded-2xl p-5 sm:p-6 transition-all duration-200 shadow-md halloween-card-glow hover:-translate-y-1.5 flex flex-col justify-between animate-fade-in";
       card.style.animationDelay = `${index * 40}ms`;
 
       card.innerHTML = `
